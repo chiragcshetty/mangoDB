@@ -13,7 +13,9 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.test.*
 import org.json.JSONObject
+const val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //setContentView(R.layout.test)
 
         button_scan_qr_code.setOnClickListener {
             IntentIntegrator(this).initiateScan()
@@ -28,7 +31,10 @@ class MainActivity : AppCompatActivity() {
 
         but_qrapi.setOnClickListener({
             dispatchTakePictureIntent()
+
         })
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -47,6 +53,13 @@ class MainActivity : AppCompatActivity() {
                  //jsonParams["prid"] = result.contents.toInt()
                  //val jsonObject = JSONObject(jsonParams)
 
+                val intent = Intent(this, DisplayItemInfo::class.java).apply {
+                    putExtra(EXTRA_MESSAGE, result.contents)
+                }
+                startActivity(intent)
+
+
+/*
                 val queue = Volley.newRequestQueue(this)
                 val url = "https://chiragshetty.web.illinois.edu/get_product_details.php";
 
@@ -70,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 queue.add(jsonObjectRequest)
 
+*/
 
  /*               //------------------------JSON Get Request Volley------------------------------------------
                 val queue = Volley.newRequestQueue(this)
