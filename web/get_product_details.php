@@ -6,7 +6,7 @@
  */
  
 // array for JSON response
-$response = array();
+$product = array();
  
 // include db connect class
 require_once __DIR__ . '/db_connect.php';
@@ -29,16 +29,23 @@ if (isset($_GET["prid"]))
             while ($row = mysqli_fetch_array($result)) 
                 {
                     //echo $row['prid'] . ' ' . $row['name'] .': '. $row['aisle'] . ' ' .'<br />';
-                    $product = array();
-                    $product["prid"] = $row["prid"];
-                    $product["name"] = $row["name"];
-                    $product["price"] = $row["price"];
-                    $product["aisle"] = $row["aisle"];
+                    
+                    
+                    //$product["prid"] = $row["prid"];
+                    //$product["name"] = $row["name"];
+                    //$product["price"] = $row["price"];
+                    //$product["aisle"] = $row["aisle"];
+                    
+                    $product["prid"] = $row["prID"];
+                    $product["name"] = $row["prName"];
+                    $product["price"] = $row["prPrice"];
+                    $product["desc"] = $row["prDesc"];
+                    $product["image"] = $row["prImage"];
 
-                    $response["success"] = 1;
-                    $response["product"] = array();
+                    $product["success"] = 1;
+                    $product["product"] = array();
  
-                    array_push($response["product"], $product);
+                    //array_push($response["product"], $product);
                     echo json_encode($product);
                     
                 
@@ -46,17 +53,17 @@ if (isset($_GET["prid"]))
         }
         else
         {
-            $response["success"] = 0;
-            $response["message"] = "No product found";
-            echo json_encode($response);
+            $product["success"] = 0;
+            $product["message"] = "No product found";
+            echo json_encode($product);
         }
     }
 else
     {
         // required field is missing
-        $response["success"] = 0;
-        $response["message"] = "Required field(s) is missing";
-        echo json_encode($response);
+        $product["success"] = 0;
+        $product["message"] = "Required field(s) is missing";
+        echo json_encode($product);
     }
 
 ?>
