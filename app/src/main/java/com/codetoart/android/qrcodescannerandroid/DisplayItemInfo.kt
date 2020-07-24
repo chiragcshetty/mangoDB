@@ -1,5 +1,6 @@
 package com.codetoart.android.qrcodescannerandroid
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,9 @@ class DisplayItemInfo : AppCompatActivity() {
             Response.Listener { response ->
                 if (response.getString("success").toInt()==1) {
                     item_name.text = " %s".format(response.getString("name"))
+                    textView.text = "%s".format(response.getString("desc"))
+                    item_price.text = "$%s".format(response.getString("price"))
+                    item_img.setImageURI(Uri.parse(response.getString("image")))
                     //pr_price.text = "Price: $%s".format(response.getString("price"))
                     //pr_aisle.text = "Please go to aisle  %s".format(response.getString("aisle"))
                     image.setImageResource(R.drawable.tom);
