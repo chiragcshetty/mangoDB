@@ -19,44 +19,66 @@ $db = $con->conn();
 if (isset($_GET["prid"]))
     {
         $prid = $_GET['prid'];
+        $aid = $_GET['actionId'];
         
-        // get products from table
-        $query = "SELECT * FROM products  WHERE prid=$prid";
-        $result = mysqli_query($db, $query);
+        switch($aid)
+            {
+            case 1:
 
-        if(($result->num_rows)>0)
-        {
-            while ($row = mysqli_fetch_array($result)) 
+                $query = "SELECT * FROM products  WHERE prid=$prid";
+                $result = mysqli_query($db, $query);
+
+                if(($result->num_rows)>0 && $aid==1)
                 {
-                    //echo $row['prid'] . ' ' . $row['name'] .': '. $row['aisle'] . ' ' .'<br />';
-                    
-                    
-                    //$product["prid"] = $row["prid"];
-                    //$product["name"] = $row["name"];
-                    //$product["price"] = $row["price"];
-                    //$product["aisle"] = $row["aisle"];
-                    
-                    $product["prid"] = $row["prID"];
-                    $product["name"] = $row["prName"];
-                    $product["price"] = $row["prPrice"];
-                    $product["desc"] = $row["prDesc"];
-                    $product["image"] = $row["prImage"];
+                    while ($row = mysqli_fetch_array($result)) 
+                        {
+                            
+                            $product["prid"] = $row["prID"];
+                            $product["name"] = $row["prName"];
+                            $product["price"] = $row["prPrice"];
+                            $product["desc"] = $row["prDesc"];
+                            $product["company"] = $row["prCompany"];
+                            $product["aisle"] = $row["prAisle"];
+                            $product["image"] = $row["prImage"];
 
-                    $product["success"] = 1;
-                    $product["product"] = array();
- 
-                    //array_push($response["product"], $product);
-                    echo json_encode($product);
-                    
-                
+                            $product["success"] = 1;
+                            $product["product"] = array();
+         
+                            //array_push($response["product"], $product);
+                            echo json_encode($product);
+                            
+                        }
                 }
-        }
-        else
-        {
-            $product["success"] = 0;
-            $product["message"] = "No product found";
-            echo json_encode($product);
-        }
+                else
+                {
+                    $product["success"] = 0;
+                    $product["message"] = "No product found";
+                    echo json_encode($product);
+                }
+                break;
+
+            case 2:
+                echo ($aid);
+                break;
+
+            case 3:
+                echo ($aid);
+                break;
+
+            case 4:
+                echo ($aid);
+                break;
+            }
+
+
+
+
+
+
+
+
+
+
     }
 else
     {

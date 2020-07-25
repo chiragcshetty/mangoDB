@@ -30,6 +30,8 @@ class DisplayItemInfo : AppCompatActivity() {
             Response.Listener { response ->
                 if (response.getString("success").toInt()==1) {
                     item_name.text = " %s".format(response.getString("name"))
+
+
                     //pr_price.text = "Price: $%s".format(response.getString("price"))
                     //pr_aisle.text = "Please go to aisle  %s".format(response.getString("aisle"))
                     //image.setImageResource(R.drawable.tom);
