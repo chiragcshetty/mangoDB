@@ -8,6 +8,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_display_item_info.*
 
 class DisplayItemInfo : AppCompatActivity() {
@@ -30,7 +31,7 @@ class DisplayItemInfo : AppCompatActivity() {
                     item_name.text = " %s".format(response.getString("name"))
                     textView.text = "%s".format(response.getString("desc"))
                     item_price.text = "$%s".format(response.getString("price"))
-                    item_img.setImageURI(Uri.parse(response.getString("image")))
+                    Picasso.get().load(response.getString("image")).into(item_img)
                     //pr_price.text = "Price: $%s".format(response.getString("price"))
                     //pr_aisle.text = "Please go to aisle  %s".format(response.getString("aisle"))
                     image.setImageResource(R.drawable.tom);

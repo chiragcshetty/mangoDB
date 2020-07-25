@@ -18,66 +18,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minHeight="?actionBarSize"
-                    android:padding="@dimen/appbar_padding"
-                    android:text="@string/app_name"
-                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/colorPrimary" />
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="282dp"
-                android:layout_height="222dp"
-                android:layout_marginTop="340dp"
-                android:scrollbars="vertical"
-                android:scrollHorizontally="false"
-                android:text="Item Info"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.496"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/appBarLayout" />
-
             <Button
                 android:id="@+id/button"
                 android:layout_width="97dp"
                 android:layout_height="62dp"
-                android:layout_marginTop="272dp"
+                android:layout_marginTop="160dp"
                 android:text="Add to Cart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.984"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/item_img"
-                android:layout_width="207dp"
-                android:layout_height="152dp"
-                android:layout_marginTop="180dp"
-                android:src="@drawable/groc"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/appBarLayout"
-                tools:srcCompat="@tools:sample/avatars" />
 
             <EditText
                 android:id="@+id/editTextTextPersonName2"
@@ -93,6 +43,21 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <EditText
+                android:id="@+id/editTextTextPersonName5"
+                android:layout_width="421dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/colorPrimary"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Recommended Items"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView"
@@ -114,15 +79,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <ImageButton
-                            android:id="@+id/imageButton"
-                            android:layout_width="170dp"
-                            android:layout_height="152dp"
-                            android:layout_weight="1"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:srcCompat="@tools:sample/avatars" />
-
                         <EditText
                             android:id="@+id/editTextTextPersonName8"
                             android:layout_width="172dp"
@@ -132,25 +88,19 @@
                             android:text="Name"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+
+                        <ImageButton
+                            android:id="@+id/imageButton"
+                            android:layout_width="170dp"
+                            android:layout_height="152dp"
+                            android:layout_weight="1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:srcCompat="@tools:sample/avatars" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>
             </HorizontalScrollView>
-
-            <EditText
-                android:id="@+id/editTextTextPersonName5"
-                android:layout_width="421dp"
-                android:layout_height="42dp"
-                android:layout_marginTop="1dp"
-                android:background="@color/colorPrimary"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Recommended Items"
-                android:textColor="#FFFFFF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.502"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
             <HorizontalScrollView
                 android:layout_width="415dp"
@@ -170,14 +120,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <ImageButton
-                            android:id="@+id/imageButton4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:srcCompat="@tools:sample/avatars" />
-
                         <EditText
                             android:id="@+id/editTextTextPersonName9"
                             android:layout_width="172dp"
@@ -188,42 +130,98 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/imageButton4" />
 
+                        <ImageButton
+                            android:id="@+id/imageButton4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:srcCompat="@tools:sample/avatars" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <TextView
-                android:id="@+id/item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@color/colorAccent"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+            <ImageView
+                android:id="@+id/item_img"
+                android:layout_width="207dp"
+                android:layout_height="152dp"
+                android:layout_marginTop="68dp"
+                android:src="@drawable/groc"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/appBarLayout"
-                app:layout_constraintVertical_bias="0.22" />
-
-            <TextView
-                android:id="@+id/item_price"
-                android:layout_width="68dp"
-                android:layout_height="29dp"
-                android:layout_marginTop="164dp"
-                android:layout_marginEnd="4dp"
-                android:text="price"
-                app:layout_constraintEnd_toStartOf="@+id/item_img"
-                app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+                tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/item_availability"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="72dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="68dp"
                 android:text="In Stock"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/item_price"
+                android:layout_width="68dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="180dp"
+                android:text="price"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="282dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="228dp"
+                android:scrollbars="vertical"
+                android:scrollHorizontally="false"
+                android:text="Item Info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/appBarLayout" />
+
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="TextView"
+                android:textColor="@color/colorAccent"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:theme="@style/AppTheme.AppBarOverlay"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:minHeight="?actionBarSize"
+                    android:padding="@dimen/appbar_padding"
+                    android:text="@string/app_name"
+                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorPrimary" />
+            </com.google.android.material.appbar.AppBarLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
