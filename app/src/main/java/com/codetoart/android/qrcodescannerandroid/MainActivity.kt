@@ -12,6 +12,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.zxing.integration.android.IntentIntegrator
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.test.*
 import org.json.JSONObject
@@ -24,6 +25,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //setContentView(R.layout.test)
+
+        //Picasso.get().load("https://i.imgur.com/DvpvklR.png").into(imageView);
+        //imageView.setImageResource(R.drawable.tom);
 
         button_scan_qr_code.setOnClickListener {
             IntentIntegrator(this).initiateScan()

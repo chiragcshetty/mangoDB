@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
     //-----------------------From Curie's UI----------------------------
@@ -18,4 +19,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     //--------------------------------------------------------------------
+
+    <style name="lightColor" parent="TextAppearance.AppCompat"> //For Progress bar of image
+        <item name="colorAccent">@color/lightColor</item>
+    </style>
+
 </resources>

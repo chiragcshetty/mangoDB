@@ -1,0 +1,32 @@
+ <html>
+<body>
+    
+<h2>Please enter the product ID</h2>
+First Name: <input id="pID">
+<button onclick="myFunction()">Try it</button>
+
+<p id="name"></p> 
+
+<img id="pImg" width="500" height="600"> 
+
+<script> 
+function myFunction() {
+    var p = document.getElementById("pID").value;
+    var xmlhttp = new XMLHttpRequest(); 
+    xmlhttp.onreadystatechange = function() { 
+    
+        if (this.readyState == 4 && this.status == 200) { 
+            //alert(xmlhttp.responseText);
+            var myObj = JSON.parse(this.responseText); 
+            document.getElementById("name").innerHTML = myObj.name; 
+            document.getElementById('pImg').src = myObj.image;
+        } 
+    }; 
+    xmlhttp.open("GET", "get_product_details.php?prid="+p, true); 
+    xmlhttp.send(); 
+}
+</script> 
+
+
+</body>
+</html>
