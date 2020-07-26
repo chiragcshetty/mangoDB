@@ -88,16 +88,28 @@
                             android:inputType="textPersonName"
                             android:text="Name"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+                            app:layout_constraintTop_toBottomOf="@+id/img_reco1" />
 
                         <ImageButton
-                            android:id="@+id/imageButton"
+                            android:id="@+id/img_reco1"
                             android:layout_width="170dp"
                             android:layout_height="152dp"
                             android:layout_weight="1"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:srcCompat="@tools:sample/avatars" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBar_reco1"
+                            style="?android:attr/progressBarStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:theme="@style/lightColor"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/img_reco1"
+                            app:layout_constraintVertical_bias="0.395" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>

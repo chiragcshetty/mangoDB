@@ -1,0 +1,28 @@
+SELECT t.txID, t.cuID, ROUND(SUM(t.quantity*pr.prPrice),2)
+FROM transactionList as t NATURAL JOIN products as pr
+GROUP BY t.txID, t.cuID
+
+
+//Loyal Users
+
+SELECT b.cuID as Customer_ID, c.cuName as Customer_Name, ROUND(AVG(bill),2) as Average_Cart, COUNT(*) as No_Visits, SUM(bill) as Total_Sale
+FROM (SELECT t.txID as trx, t.cuID as cuID, ROUND(SUM(t.quantity*pr.prPrice),2) as bill
+	  FROM transactionList t NATURAL JOIN products pr
+      GROUP BY t.txID, t.cuID) as b NATURAL JOIN customers as c
+GROUP BY b.cuID
+ORDER BY Average_Cart DESC
+LIMIT 3
+
+
+SELECT t2.cuID
+FROM transactionList as t2
+WHERE (t2.prID = 10) AND ( (t2.cuID,t2.txID) IN (SELECT t1.cuID, t1.txID
+									             FROM transactionList as t1
+									             WHERE t1.prID = 4) )
+
+SELECT t2.cuID, COUNT(*)
+FROM transactionList as t2
+WHERE (t2.prID = 10) AND ( (t2.cuID,t2.txID) IN (SELECT t1.cuID, t1.txID
+									             FROM transactionList as t1
+									             WHERE t1.prID = 4) )
+GROUP BY t2.cuID

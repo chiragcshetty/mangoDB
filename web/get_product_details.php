@@ -70,15 +70,6 @@ if (isset($_GET["prid"]))
                 break;
             }
 
-
-
-
-
-
-
-
-
-
     }
 else
     {

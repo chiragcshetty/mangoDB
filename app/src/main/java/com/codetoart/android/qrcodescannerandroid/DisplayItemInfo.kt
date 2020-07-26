@@ -21,7 +21,9 @@ class DisplayItemInfo : AppCompatActivity() {
         setContentView(R.layout.activity_display_item_info)
 
         val image: ImageView
+        val image_reco1: ImageView
         image = findViewById(R.id.item_img);
+        image_reco1 = findViewById(R.id.img_reco1);
 
         val message = intent.getStringExtra(EXTRA_MESSAGE)
 
@@ -36,7 +38,7 @@ class DisplayItemInfo : AppCompatActivity() {
 
                     textView.text = "%s".format(response.getString("desc"))
                     item_price.text = "$%s".format(response.getString("price"))
-                    Picasso.get().load(response.getString("image")).into(item_img)
+                    //Picasso.get().load(response.getString("image")).into(item_img)
 
                     //pr_price.text = "Price: $%s".format(response.getString("price"))
                     //pr_aisle.text = "Please go to aisle  %s".format(response.getString("aisle"))
@@ -50,6 +52,19 @@ class DisplayItemInfo : AppCompatActivity() {
                         .into(image, object: com.squareup.picasso.Callback {
                             override fun onSuccess() {
                                 progressBar.setVisibility(View.GONE)
+
+                            }
+                            override fun onError(e: java.lang.Exception?) {
+                                //do smth when there is picture loading error
+                            }
+                        })
+
+                    progressBar_reco1.setVisibility(View.VISIBLE);
+                    Picasso.get()
+                        .load(response.getString("image"))
+                        .into(image_reco1, object: com.squareup.picasso.Callback {
+                            override fun onSuccess() {
+                                progressBar_reco1.setVisibility(View.GONE)
 
                             }
                             override fun onError(e: java.lang.Exception?) {
