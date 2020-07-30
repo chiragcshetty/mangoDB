@@ -32,6 +32,12 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        wishlistButton.setOnClickListener({
+            val myIntent = Intent(this@MainActivity,ItemList::class.java)
+            this@MainActivity.startActivity(myIntent)
+
+        })
+
 
     }
 
