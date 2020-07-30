@@ -1,21 +1,14 @@
 package com.codetoart.android.qrcodescannerandroid
 
-import android.R.attr.password
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.google.zxing.integration.android.IntentIntegrator
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.test.*
-import org.json.JSONObject
+
 const val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
 
 
@@ -24,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setTitle("mangoDB")
         //setContentView(R.layout.test)
 
         //Picasso.get().load("https://i.imgur.com/DvpvklR.png").into(imageView);
