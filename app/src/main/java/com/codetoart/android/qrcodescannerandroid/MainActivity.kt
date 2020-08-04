@@ -6,6 +6,11 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -37,6 +42,68 @@ class MainActivity : AppCompatActivity() {
             this@MainActivity.startActivity(myIntent)
 
         })
+
+        SearchButton.setOnClickListener {
+            val intent = Intent(this, DisplayItemInfo::class.java).apply {
+                putExtra(EXTRA_MESSAGE, SearchBar.text.toString())
+                //Log.e("411", SearchBar.text.toString())
+            }
+            startActivity(intent)
+        }
+
+        buybutton.setOnClickListener {
+            // Instantiate the RequestQueue.
+            val queue = Volley.newRequestQueue(MangoDB.getAppContext())
+            val url = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=4&cuid=1"
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                Response.Listener { response ->
+                    try {
+                        if (response.getInt("success") != 1) {
+                            return@Listener
+                        }
+                    } catch (e: Exception) {
+                        return@Listener
+                    }
+
+                    val url =
+                        "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=3&cuid=1&txid=" + response.getString("txid");
+
+                    val jsonObjectRequest = JsonObjectRequest(
+                        Request.Method.GET,
+                        url,
+                        null,
+                        Response.Listener { response ->
+                            try {
+                                if (response.getInt("success") != 1) {
+                                    return@Listener
+                                }
+                            } catch (e: Exception) {
+                                return@Listener
+                            }
+                            Toast.makeText(this@MainActivity, "Bought Items", Toast.LENGTH_LONG).show()
+                            Transaction.clearTransactions()
+                        },
+                        Response.ErrorListener { // TODO: Handle error
+                        })
+
+                    // Add the request to the RequestQueue.
+
+                    // Add the request to the RequestQueue.
+                    queue.add(jsonObjectRequest)
+
+                },
+                Response.ErrorListener { // TODO: Handle error
+                })
+
+            // Add the request to the RequestQueue.
+
+            // Add the request to the RequestQueue.
+            queue.add(jsonObjectRequest)
+
+        }
 
 
     }
@@ -126,7 +193,7 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(imageBitmap)
+            //imageView.setImageBitmap(imageBitmap)
         }
     }
 

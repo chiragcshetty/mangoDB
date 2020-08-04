@@ -15,6 +15,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+import com.codetoart.android.qrcodescannerandroid.Transaction;
+
 public class ItemList extends AppCompatActivity {
 
     ListView listView;
@@ -22,17 +26,28 @@ public class ItemList extends AppCompatActivity {
     String mDescription[] = {"Item1 Des", "Item2 Des", "Item3 Des", "Item4 Des", "Item5 Des"};
     int images[] = {R.drawable.groc, R.drawable.groc, R.drawable.groc, R.drawable.groc, R.drawable.groc};
 
-
-
+    List<String> titles = new ArrayList<String>();
+    List<String> desc = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
-
         listView = findViewById(R.id.listView);
 
-        MyAdapter adapter = new MyAdapter(this, mTitle, mDescription, images);
+
+        for (Transaction t: Transaction.getTransactions()){
+            titles.add(t.name);
+            desc.add("Quantity:" + t.quantity);
+        }
+
+        int img[] = new int[Transaction.getTransactions().size()];
+
+        for(int i = 0; i < img.length; i++) {
+            img[i] = R.drawable.groc;
+        }
+
+        MyAdapter adapter = new MyAdapter(this, titles.toArray(new String[0]), desc.toArray(new String[0]), img);
         listView.setAdapter(adapter);
 
 
