@@ -1,1 +1,1 @@
-https://www.notion.so/CS411-MangoDB-c1c1fc57a5b943dcaf3eeaca1f42b9ae
+https://www.notion.so/CS411-com.codetoart.android.qrcodescannerandroid.MangoDB-c1c1fc57a5b943dcaf3eeaca1f42b9ae
