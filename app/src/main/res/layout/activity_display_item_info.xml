@@ -25,7 +25,9 @@
                 android:layout_height="62dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="144dp"
+                android:background="#009688"
                 android:text="Add to Cart"
+                android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/item_img"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -68,7 +70,7 @@
                 android:layout_marginBottom="8dp"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="2"
+                android:text="1"
                 app:layout_constraintBottom_toTopOf="@+id/add_cart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

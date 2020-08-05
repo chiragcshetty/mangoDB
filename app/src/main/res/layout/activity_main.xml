@@ -9,9 +9,11 @@
 
     <Button
         android:id="@+id/button_scan_qr_code"
-        android:layout_width="196dp"
-        android:layout_height="65dp"
+        android:layout_width="204dp"
+        android:layout_height="68dp"
+        android:background="#3F51B5"
         android:text="@string/scan_qr_code"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -23,55 +25,77 @@
 
     <Button
         android:id="@+id/but_qrapi"
-        android:layout_width="204dp"
-        android:layout_height="55dp"
+        android:layout_width="208dp"
+        android:layout_height="69dp"
+        android:background="#3F51B5"
         android:text="API Scan"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.237" />
+        app:layout_constraintVertical_bias="0.234" />
 
     <Button
         android:id="@+id/wishlistButton"
         android:layout_width="210dp"
         android:layout_height="65dp"
         android:layout_marginTop="44dp"
-        android:text="Item List"
+        android:background="#3F51B5"
+        android:text="Cart"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/SearchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginBottom="100dp"
+        android:background="#3F51B5"
+        android:text="Search"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/recommended"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/SearchBar" />
+
+    <Button
+        android:id="@+id/buybutton"
+        android:layout_width="192dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="40dp"
+        android:background="#009688"
+        android:text="Buy"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recommended" />
+
+    <Button
+        android:id="@+id/recommended"
+        android:layout_width="193dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="39dp"
+        android:background="#3F51B5"
+        android:text="Add Recommended Items"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SearchBar" />
 
     <EditText
         android:id="@+id/SearchBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_scan_qr_code" />
-
-    <Button
-        android:id="@+id/SearchButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="78dp"
-        android:text="Search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/SearchBar"
-        app:layout_constraintTop_toBottomOf="@+id/button_scan_qr_code" />
-
-    <Button
-        android:id="@+id/buybutton"
-        android:layout_width="192dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="44dp"
-        android:text="Buy"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SearchBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
