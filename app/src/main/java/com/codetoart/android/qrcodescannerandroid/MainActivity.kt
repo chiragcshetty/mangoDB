@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_display_item_info.*
 import kotlinx.android.synthetic.main.activity_main.*
+import com.codetoart.android.qrcodescannerandroid.utilities
 
 const val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
 
@@ -30,6 +31,11 @@ class MainActivity : AppCompatActivity() {
 
         //Picasso.get().load("https://i.imgur.com/DvpvklR.png").into(imageView);
         //imageView.setImageResource(R.drawable.tom);
+
+        changecuid.setOnClickListener {
+            utilities.cuid = cuidbar.text.toString().toInt()
+            Toast.makeText(this@MainActivity, "Changed cuID to " + utilities.cuid, Toast.LENGTH_LONG).show()
+        }
 
         button_scan_qr_code.setOnClickListener {
             IntentIntegrator(this).initiateScan()
@@ -56,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val queue = Volley.newRequestQueue(MangoDB.getAppContext())
-        val url2 = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=4&cuid=1"
+        val url2 = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=4&cuid=" + utilities.cuid
         val jsonObjectRequest2 = JsonObjectRequest(
             Request.Method.GET, url2, null,
             Response.Listener { response ->
@@ -73,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         recommended.setOnClickListener {
             // Instantiate the RequestQueue.
-            val url = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=7&cuid=1"
+            val url = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=7&cuid=" + utilities.cuid
             val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -84,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                         var cur = suggestions.getJSONObject(i)
                         try {
                             val t = Transaction()
-                            t.cuId = 1
+                            t.cuId = utilities.cuid
                             t.prId = cur.getString("prID").toInt()
                             t.quantity = 1;
                             t.txId = txid;
@@ -112,11 +118,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
         buybutton.setOnClickListener {
             // Instantiate the RequestQueue.
             val queue = Volley.newRequestQueue(MangoDB.getAppContext())
-            val url = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=4&cuid=1"
+            val url = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=4&cuid=" + utilities.cuid
             val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -131,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     val url =
-                        "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=3&cuid=1&txid=" + response.getString("txid");
+                        "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=3&cuid=" + utilities.cuid + "&txid=" + response.getString("txid");
 
                     val jsonObjectRequest = JsonObjectRequest(
                         Request.Method.GET,

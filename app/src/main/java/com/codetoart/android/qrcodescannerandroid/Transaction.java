@@ -23,7 +23,7 @@ interface Callback {
 public class Transaction {
     public int prId;
     public int txId;
-    public int cuId = 1;
+    public int cuId = utilities.cuid;
     public int quantity;
     public String desc;
     public String addedFrom;
@@ -60,6 +60,7 @@ public class Transaction {
     }
 
     public void commit(final Callback cb){
+        cuId = utilities.cuid;
         // Instantiate the RequestQueue.
         final Transaction curr = this;
         RequestQueue queue = Volley.newRequestQueue(MangoDB.getAppContext());

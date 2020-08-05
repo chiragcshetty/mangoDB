@@ -12,6 +12,7 @@ import java.util.Map;
 
 public class utilities {
     public static final String USERDATA = "MyVariables";
+    public static int cuid = 1;
 
     private static void saveMap(String key, Map<String,String> inputMap){
         SharedPreferences pSharedPref = MangoDB.getAppContext().getSharedPreferences(USERDATA, Context.MODE_PRIVATE);
