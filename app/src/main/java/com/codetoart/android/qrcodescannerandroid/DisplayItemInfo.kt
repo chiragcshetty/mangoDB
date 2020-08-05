@@ -20,6 +20,7 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_display_item_info.*
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.Integer.parseInt
 
 
 var txid = 0;
@@ -132,7 +133,7 @@ class DisplayItemInfo : AppCompatActivity() {
             val t = Transaction()
             t.cuId = 1
             t.prId = prid
-            t.quantity = 1
+            t.quantity = parseInt(quantity.text.toString());
             t.txId = txid
             t.addedFrom = "qr"
             t.desc = desc;

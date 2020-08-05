@@ -45,6 +45,20 @@ public class Transaction {
         return transactions;
     }
 
+    public static void deleteTransaction(int position)
+    {
+        try {
+            List<Transaction> transactions = getTransactions();
+
+            transactions.remove(position);
+            utilities.save("transactions", (new Gson()).toJson(transactions));
+        }
+        catch(Exception e)
+        {
+
+        }
+    }
+
     public void commit(final Callback cb){
         // Instantiate the RequestQueue.
         final Transaction curr = this;

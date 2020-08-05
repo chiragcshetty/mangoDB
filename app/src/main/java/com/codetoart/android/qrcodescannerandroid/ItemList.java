@@ -11,13 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.codetoart.android.qrcodescannerandroid.Transaction;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 public class ItemList extends AppCompatActivity {
 
@@ -50,13 +63,14 @@ public class ItemList extends AppCompatActivity {
         MyAdapter adapter = new MyAdapter(this, titles.toArray(new String[0]), desc.toArray(new String[0]), img);
         listView.setAdapter(adapter);
 
-
+/*
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
             }
         });
+ */
     }
 
     class MyAdapter extends ArrayAdapter<String> {
@@ -85,6 +99,52 @@ public class ItemList extends AppCompatActivity {
             images.setImageResource(rImgs[position]);
             myTitle.setText(rTitle[position]);
             myDescription.setText(rDescription[position]);
+
+            Button deleteButton = (Button)row.findViewById(R.id.Delete);
+            final int i = position;
+            final Transaction t = Transaction.getTransactions().get(i);
+            Picasso.get()
+                    .load(t.imgURL)
+                    .into(images);
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    RequestQueue queue = Volley.newRequestQueue(MangoDB.getAppContext());
+
+                    String url ="https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=6&cuid=1&txid=" + t.txId + "&prid=" + t.prId;
+
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                            (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try{
+                                        if(response.getInt("success") != 1)
+                                        {
+                                            return;
+                                        }
+                                    }
+                                    catch(Exception e){
+                                        return;
+                                    }
+                                    Transaction.deleteTransaction(i);
+                                    Toast.makeText(MangoDB.getAppContext(), "Item Deleted", Toast.LENGTH_LONG).show();
+                                    finish();
+                                    startActivity(getIntent());
+                                }
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // TODO: Handle error
+                                }
+                            });
+
+                    // Add the request to the RequestQueue.
+                    queue.add(jsonObjectRequest);
+                }
+            });
+
 
             return row;
         }

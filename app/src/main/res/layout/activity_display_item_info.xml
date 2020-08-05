@@ -60,6 +60,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
+            <EditText
+                android:id="@+id/quantity"
+                android:layout_width="89dp"
+                android:layout_height="43dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="8dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="2"
+                app:layout_constraintBottom_toTopOf="@+id/add_cart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/item_img" />
+
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView"
                 android:layout_width="415dp"
@@ -223,6 +237,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginBottom="48dp"
+                android:text="Quantity"
+                app:layout_constraintBottom_toBottomOf="@+id/quantity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/item_img" />
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBarLayout"
