@@ -12,12 +12,15 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.zxing.integration.android.IntentIntegrator
+import kotlinx.android.synthetic.main.activity_display_item_info.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 const val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
 
 
 class MainActivity : AppCompatActivity() {
+
+    var txid = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +53,65 @@ class MainActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+
+
+        val queue = Volley.newRequestQueue(MangoDB.getAppContext())
+        val url2 = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=4&cuid=1"
+        val jsonObjectRequest2 = JsonObjectRequest(
+            Request.Method.GET, url2, null,
+            Response.Listener { response ->
+                if (response.getString("success").toInt()==1) {
+                    txid = response.getString("txid").toInt()
+
+                }
+            },
+            Response.ErrorListener { error ->
+            }
+        )
+
+        queue.add(jsonObjectRequest2)
+
+        recommended.setOnClickListener {
+            // Instantiate the RequestQueue.
+            val url = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=7&cuid=2"
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                Response.Listener { response ->
+                    var suggestions = response.getJSONArray("suggestions")
+                    for (i in 0 until suggestions.length()) {
+                        var cur = suggestions.getJSONObject(i)
+                        try {
+                            val t = Transaction()
+                            t.cuId = 1
+                            t.prId = cur.getString("prID").toInt()
+                            t.quantity = 1;
+                            t.txId = txid;
+                            t.addedFrom = "qr"
+                            t.desc = cur.getString("prDesc");
+                            t.name = cur.getString("prName");
+                            t.imgURL = cur.getString("prImage");
+
+
+                            t.commit { success:Boolean ->
+                            }
+                        } catch (e: Exception) {}
+                    }
+                    Toast.makeText(this@MainActivity, "Added Recommendations", Toast.LENGTH_LONG).show()
+                },
+                Response.ErrorListener { // TODO: Handle error
+                })
+
+            // Add the request to the RequestQueue.
+
+            // Add the request to the RequestQueue.
+            queue.add(jsonObjectRequest)
+
+        }
+
+
+
 
         buybutton.setOnClickListener {
             // Instantiate the RequestQueue.
