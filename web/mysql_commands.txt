@@ -20,9 +20,105 @@ WHERE (t2.prID = 10) AND ( (t2.cuID,t2.txID) IN (SELECT t1.cuID, t1.txID
 									             FROM transactionList as t1
 									             WHERE t1.prID = 4) )
 
-SELECT t2.cuID, COUNT(*)
+SELECT t2.cuID, COUNT(*) as no_Corr
 FROM transactionList as t2
 WHERE (t2.prID = 10) AND ( (t2.cuID,t2.txID) IN (SELECT t1.cuID, t1.txID
 									             FROM transactionList as t1
 									             WHERE t1.prID = 4) )
 GROUP BY t2.cuID
+ORDER BY no_Corr
+
+https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=2&prid=2&txid=3&cuid=4&quantity=5&addedFrom=qr
+
+                $prid = $_GET['prid'];
+                $txid = $_GET['txid'];
+                $cuid = $_GET['cuid'];
+                $listType = 'cart';
+                $quantity = $_GET['quantity'];
+                $dateAdded = date("Y-m-d");
+                $addedFrom = $_GET['addedFrom'];
+
+
+
+SELECT t1.prID, t1.dateAdded,  t2.dateAdded
+FROM transactionList t1 JOIN transactionList t2 ON (t1.txID = t2.txID + 1 AND t1.prID=t2.prID ) 
+WHERE t1.cuID=2
+ORDER BY 1
+
+SELECT DATEDIFF(t1.dateAdded, t2.dateAdded)
+FROM transactionHistory t1 JOIN transactionHistory t2 ON (t1.row_no = t2.row_no+1);
+
+SELECT *, ROW_NUMBER() OVER (ORDER BY t1.txID) as row_no
+FROM transactionList t1
+WHERE t1.cuID = 2 AND t1.prID = 4
+
+CREATE TEMPORARY TABLE tempT 
+SELECT t1.prID, t1.dateAdded as d1,  t2.dateAdded as d2
+FROM transactionList t1 JOIN transactionList t2 ON (t1.txID = t2.txID + 1 AND t1.prID=t2.prID ) 
+WHERE t1.cuID=2
+ORDER BY 1
+
+*******************8
+
+
+CREATE TEMPORARY TABLE transactionHistory 
+SELECT t.prID, t.txID, t.quantity, t.dateAdded, t.addedFrom, ROW_NUMBER() OVER (PARTITION BY t.prID ORDER BY t.txID) as row_no
+FROM transactionList t
+WHERE t.cuID = 2;
+
+SELECT * FROM transactionHistory
+
+SELECT DATEDIFF(t1.dateAdded, t2.dateAdded)
+FROM transactionHistory t1 JOIN transactionHistory t2 ON (t1.row_no = t2.row_no+1);
+
+
+#######
+CREATE TEMPORARY TABLE transactionHistory 
+SELECT t.prID, t.txID, t.quantity, t.dateAdded, t.addedFrom, ROW_NUMBER() OVER (PARTITION BY t.prID ORDER BY t.txID) as row_no
+FROM transactionList t
+WHERE t.cuID = 2;
+
+
+SELECT t1.prID, t1.dateAdded as d1, t2.dateAdded as d2, t2.quantity, t1.txID - t2.txID, DATEDIFF(t1.dateAdded, t2.dateAdded)/t2.quantity as avg_shelf
+FROM transactionHistory t1 JOIN transactionHistory t2 ON (t1.row_no = t2.row_no+1 AND t1.prID = t2.prID);
+
+
+SELECT t1.prID, ROUND(AVG(DATEDIFF(t1.dateAdded, t2.dateAdded)/t2.quantity),2) as avg_shelf
+FROM transactionHistory t1 JOIN transactionHistory t2 ON (t1.row_no = t2.row_no+1 AND t1.prID = t2.prID)
+GROUP BY t1.prID
+
+
+
+
+SELECT t.cuID, t.prID, , COUNT(*) OVER(PARTITION BY t.cuID, t.prID) as pr_visit,  txCount.no_tx
+FROM transactionList t NATURAL JOIN (SELECT cuID, COUNT(DISTINCT txID) as no_tx
+									 FROM transactionList
+									 GROUP BY cuID) as txCount
+
+
+									 SELECT t.prID, MAX(dateAdded) AS lastBuyOn, DATEDIFF(MAX(dateAdded), '2011/08/25') AS DateDiff ,COUNT(*) AS no_buys
+FROM transactionList t
+WHERE t.cuID = 2
+GROUP BY t.prID
+HAVING no_buys>50
+
+$$$$$$$$$$$$$4
+
+
+DELIMITER //
+CREATE PROCEDURE get_txHistory(IN cust INT)
+	BEGIN
+  		DECLARE today DATE; 
+  		SET today = (SELECT CURRENT_DATE());
+  
+  		SELECT temp.prID, DATEDIFF(today, temp.lastBuyOn) AS DateDiff, temp.no_buys
+        FROM (	SELECT t.prID, MAX(dateAdded) AS lastBuyOn ,COUNT(*) AS no_buys
+				FROM transactionList t
+				WHERE t.cuID = cust
+				GROUP BY t.prID
+				HAVING no_buys>50
+                ORDER BY no_buys) as temp
+  
+  
+END //
+DELIMITER ;

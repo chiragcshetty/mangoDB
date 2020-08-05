@@ -1,0 +1,216 @@
+Create view to keep a running count of transactions per user in last 100 days
+
+CREATE VIEW cuTxCount AS
+(
+    SELECT cuID, COUNT(DISTINCT txID) as no_tx
+    FROM transactionList
+    WHERE dateAdded >= (SELECT DATE_ADD(NOW(), INTERVAL -200 DAY)) AND listType='history'
+    GROUP BY cuID 
+)
+
+%%% Create trigger when a user tx count falls
+
+
+#######################################################################################3
+%%For a Given User, get the number of transactions per product in last 100 days
+
+
+DELIMITER //
+CREATE PROCEDURE buyCount_filter(IN cust INT)
+    BEGIN
+        DECLARE txCount INT; 
+        SET txCount = (SELECT no_tx FROM cuTxCount WHERE cuID = cust); 
+        CREATE TEMPORARY TABLE frequentPr(prID INT, buy_ratio FLOAT);
+        
+        CREATE TEMPORARY TABLE prBuyCount
+            SELECT temp.prID, temp.no_buys, ROUND(temp.no_buys/txCount,2) as buy_ratio
+            FROM (SELECT t.prID, COUNT(*) AS no_buys
+                  FROM transactionList t
+                  WHERE t.cuID = cust AND t.dateAdded >= (SELECT DATE_ADD(NOW(), INTERVAL -200 DAY)) AND listType='history'
+                  GROUP BY t.prID) as temp;
+                
+        /*Figure out the frequent enough product */     
+        INSERT INTO frequentPr
+            SELECT prID, buy_ratio
+            FROM prBuyCount
+            WHERE buy_ratio>0.5;
+            
+        /*Obtain transactions involving selected products*/ 
+        CREATE TEMPORARY TABLE frequentPrInfo 
+            SELECT t.prID, t.txID, t.quantity, t.dateAdded, ROW_NUMBER() OVER (PARTITION BY t.prID ORDER BY t.txID) as row_no
+            FROM transactionList t 
+            WHERE (t.cuID = cust) AND (t.prID IN (SELECT f.prID FROM frequentPr f)) AND listType='history' ;
+        
+        /*Obtain timeline of purchases for each selected product*/
+        CREATE TEMPORARY TABLE purchaseTimeline 
+            SELECT t1.prID, t1.txID, t1.dateAdded as d1, t2.dateAdded as d2,
+               t2.quantity, (t1.txID - t2.txID) as tx_diff, DATEDIFF(t1.dateAdded, t2.dateAdded) as date_diff
+            FROM frequentPrInfo t1 JOIN frequentPrInfo t2 ON (t1.row_no = t2.row_no+1 AND t1.prID = t2.prID)
+            ORDER BY t1.prID, t1.dateAdded;
+        
+       CREATE TEMPORARY TABLE timelineStat
+            SELECT pt.prID, MAX(pt.txID) as lastBuyTx, ROUND(AVG(pt.date_diff/pt.quantity),2) as avg_shelf, ROUND(STDDEV(pt.date_diff/pt.quantity),2) as std_shelf
+            FROM purchaseTimeline pt
+            GROUP BY pt.prID;
+            
+      CREATE TEMPORARY TABLE consistentPr  
+            SELECT prID, std_shelf/avg_shelf as conRatio
+            FROM timelineStat
+            WHERE std_shelf/avg_shelf <0.35;
+            
+      CREATE TEMPORARY TABLE inConsistentPr 
+            SELECT prID FROM timelineStat
+            EXCEPT
+            SELECT prID FROM consistentPr;
+       
+     CREATE TEMPORARY TABLE projection
+            SELECT cp.prID, ts.avg_shelf, fp.quantity, fp.dateAdded
+            FROM (consistentPr cp NATURAL JOIN timelineStat ts) JOIN frequentPrInfo fp ON (fp.txID = ts.lastBuyTx AND fp.prID = cp.prID);
+            
+      ALTER TABLE projection ADD COLUMN nextBuy DATE;
+      UPDATE projection SET nextBuy = (SELECT DATE_ADD(dateAdded, INTERVAL ROUND(avg_shelf*quantity,0) DAY));
+      
+      SELECT * FROM projection;
+        
+END //
+DELIMITER ;
+
+CALL buyCount_filter(2)
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+DELIMITER //
+CREATE PROCEDURE buyCount_filter5(IN cust INT)
+    BEGIN
+        DECLARE txCount INT; 
+        SET txCount = (SELECT no_tx FROM cuTxCount WHERE cuID = cust); 
+        CREATE TEMPORARY TABLE frequentPr(prID INT, buy_ratio FLOAT);
+        
+        CREATE TEMPORARY TABLE prBuyCount
+            SELECT temp.prID, temp.no_buys, ROUND(temp.no_buys/txCount,2) as buy_ratio
+            FROM (SELECT t.prID, COUNT(*) AS no_buys
+                  FROM transactionList t
+                  WHERE t.cuID = cust AND t.dateAdded >= (SELECT DATE_ADD(NOW(), INTERVAL -200 DAY)) AND listType='history'
+                  GROUP BY t.prID) as temp;
+                
+        /*Figure out the frequent enough product */     
+        INSERT INTO frequentPr
+            SELECT prID, buy_ratio
+            FROM prBuyCount
+            WHERE buy_ratio>0.5;
+            
+        /*Obtain transactions involving selected products*/ 
+        CREATE TEMPORARY TABLE frequentPrInfo 
+            SELECT t.prID, t.txID, t.quantity, t.dateAdded, ROW_NUMBER() OVER (PARTITION BY t.prID ORDER BY t.txID) as row_no
+            FROM transactionList t 
+            WHERE (t.cuID = cust) AND (t.prID IN (SELECT f.prID FROM frequentPr f)) AND listType='history' ;
+        
+        /*Obtain timeline of purchases for each selected product*/
+        CREATE TEMPORARY TABLE purchaseTimeline 
+            SELECT t1.prID, t1.txID, t1.dateAdded as d1, t2.dateAdded as d2,
+               t2.quantity, (t1.txID - t2.txID) as tx_diff, DATEDIFF(t1.dateAdded, t2.dateAdded) as date_diff
+            FROM frequentPrInfo t1 JOIN frequentPrInfo t2 ON (t1.row_no = t2.row_no+1 AND t1.prID = t2.prID)
+            ORDER BY t1.prID, t1.dateAdded;
+        
+       CREATE TEMPORARY TABLE timelineStat
+            SELECT pt.prID, MAX(pt.txID) as lastBuyTx, ROUND(AVG(pt.date_diff/pt.quantity),2) as avg_shelf, ROUND(STDDEV(pt.date_diff/pt.quantity),2) as std_shelf
+            FROM purchaseTimeline pt
+            GROUP BY pt.prID;
+            
+      CREATE TEMPORARY TABLE consistentPr  
+            SELECT prID, std_shelf/avg_shelf as conRatio
+            FROM timelineStat
+            WHERE std_shelf/avg_shelf <0.40;
+            
+      CREATE TEMPORARY TABLE inConsistentPr 
+            SELECT prID FROM timelineStat
+            EXCEPT
+            SELECT prID FROM consistentPr;
+       
+     CREATE TEMPORARY TABLE projection
+            SELECT cp.prID, ts.avg_shelf, fp.quantity, fp.dateAdded
+            FROM (consistentPr cp NATURAL JOIN timelineStat ts) JOIN frequentPrInfo fp ON (fp.txID = ts.lastBuyTx AND fp.prID = cp.prID);
+            
+      ALTER TABLE projection ADD COLUMN nextBuy DATE;
+      UPDATE projection SET nextBuy = (SELECT DATE_ADD(dateAdded, INTERVAL ROUND(avg_shelf*quantity,0) DAY));
+      
+      SELECT pr.prID, pr.prName, pr.prCompany, pr.prPrice,pr.prAisle, pr.prDesc, pr.prImage
+      FROM projection NATURAL JOIN products pr
+      WHERE nextBuy <= (SELECT DATE_ADD(NOW(), INTERVAL 2 DAY));
+        
+END //
+DELIMITER ;
+
+CALL buyCount_filter5(2)
+
+$$$$$$$$$$$$$$$$$$$$$$$
+
+DELIMITER //
+CREATE PROCEDURE prSimilarity(IN cust INT, IN prid INT)
+    BEGIN
+        DECLARE txCount INT; 
+        DECLARE txPrCount INT;
+        SET txCount = (SELECT no_tx FROM cuTxCount WHERE cuID = cust);  
+        
+        CREATE TEMPORARY TABLE prTxList
+                SELECT *
+                FROM transactionList as t
+                WHERE (t.cuID = cust) AND (t.prID = prid);
+        
+        SET txPrCount = (SELECT COUNT(*)
+                          FROM prTxList);
+                            
+        SELECT pr.prID, pr.prName, pr.prCompany, pr.prPrice,pr.prAisle, pr.prDesc, pr.prImage, temp.no_Corr, txPrCount, temp.no_Corr/txPrCount as corr_ratio
+        FROM(   SELECT t2.prID, COUNT(*) AS no_Corr
+                FROM transactionList as t2 
+                WHERE (t2.cuID = cust) AND (t2.prID != prid) AND t2.txID IN (SELECT t1.txID
+                                                                    FROM prTxList as t1)
+                                                    
+                GROUP BY t2.prID
+                ORDER BY no_Corr DESC
+                LIMIT 3) as temp NATURAL JOIN products pr
+        WHERE temp.no_Corr/txPrCount > 0.5;
+        
+END //
+DELIMITER ;
+
+CALL prSimilarity(2,12)
+
+%%%
+
+DELIMITER //
+CREATE PROCEDURE prSimilarity2(IN cust INT, IN prid INT)
+    BEGIN
+        DECLARE txCount INT; 
+        DECLARE txPrCount INT;
+        SET txCount = (SELECT no_tx FROM cuTxCount WHERE cuID = cust);  
+        
+        CREATE TEMPORARY TABLE prTxList
+                SELECT t.prID, COUNT(DISTINCT t.txID) as no_tx
+                FROM transactionList t
+                WHERE (t.cuID = cust)
+                GROUP BY t.prID;
+        
+        SET txPrCount = (SELECT COUNT(*)
+                          FROM prTxList pt
+                          WHERE pt.prID=prid);
+                            
+        SELECT pr.prID, pr.prName, pr.prCompany, pr.prPrice,pr.prAisle, pr.prDesc, pr.prImage, temp.no_Corr, pt.no_tx, temp.no_Corr/pt.no_tx as corr_ratio
+        FROM(   SELECT t2.prID, COUNT(*) AS no_Corr
+                FROM transactionList as t2 
+                WHERE (t2.cuID = cust) AND (t2.prID != prid) AND t2.txID IN (SELECT t1.txID
+                                                                             FROM transactionList t1 
+                                                                             WHERE (t1.cuID = cust) AND (t1.prID = prid) )
+                                                    
+                GROUP BY t2.prID
+                ) as temp NATURAL JOIN  prTxList pt NATURAL JOIN products pr
+        ORDER BY temp.no_Corr/pt.no_tx DESC
+        LIMIT 3;
+        
+END //
+DELIMITER ;
+
+CALL prSimilarity2(2,12)
+
