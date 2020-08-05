@@ -29,6 +29,7 @@ class DisplayItemInfo : AppCompatActivity() {
     var prname = "";
     var desc = "";
     var img = "";
+    var img2 = "";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +47,8 @@ class DisplayItemInfo : AppCompatActivity() {
         val url2 = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=4&cuid=1"
 
         prid = message.toInt();
+
+        val url3 = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=8&cuid=2&prid=" + prid
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url+"?prid="+message, null,
@@ -80,19 +83,6 @@ class DisplayItemInfo : AppCompatActivity() {
                             }
                         })
 
-                    progressBar_reco1.setVisibility(View.VISIBLE);
-                    Picasso.get()
-                        .load(response.getString("image"))
-                        .into(image_reco1, object: com.squareup.picasso.Callback {
-                            override fun onSuccess() {
-                                progressBar_reco1.setVisibility(View.GONE)
-
-                            }
-                            override fun onError(e: java.lang.Exception?) {
-                                //do smth when there is picture loading error
-                            }
-                        })
-
                 }else
                 {
                     item_name.text = "Not Found"
@@ -108,6 +98,7 @@ class DisplayItemInfo : AppCompatActivity() {
 
         val jsonObjectRequest2 = JsonObjectRequest(
             Request.Method.GET, url2, null,
+            //img_reco1
             Response.Listener { response ->
                 if (response.getString("success").toInt()==1) {
                     txid = response.getString("txid").toInt()
@@ -124,8 +115,40 @@ class DisplayItemInfo : AppCompatActivity() {
             }
         )
 
+        val jsonObjectRequest3 = JsonObjectRequest(
+            Request.Method.GET, url3, null,
+            Response.Listener { response ->
+                if (response.getString("success").toInt()==1) {
+                    textView2.text = response.getString("name")
+                    progressBar_reco1.setVisibility(View.VISIBLE);
+                    img2 = response.getString("image");
+                    Picasso.get()
+                        .load(response.getString("image"))
+                        .into(image_reco1, object: com.squareup.picasso.Callback {
+                            override fun onSuccess() {
+                                progressBar_reco1.setVisibility(View.GONE)
+
+                            }
+                            override fun onError(e: java.lang.Exception?) {
+                                //do smth when there is picture loading error
+                            }
+                        })
+
+                }else
+                {
+                    textView.text = "Error"
+                    //pr_price.text = " "
+                    //pr_aisle.text = " "
+                }
+            },
+            Response.ErrorListener { error ->
+                textView.text = "Error"
+            }
+        )
+
         queue.add(jsonObjectRequest)
         queue.add(jsonObjectRequest2)
+        queue.add(jsonObjectRequest3)
 
 
         add_cart.setOnClickListener{
