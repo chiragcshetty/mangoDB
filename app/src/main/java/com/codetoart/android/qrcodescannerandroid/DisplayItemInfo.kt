@@ -44,11 +44,11 @@ class DisplayItemInfo : AppCompatActivity() {
 
         val queue = Volley.newRequestQueue(this)
         val url = "https://chiragshetty.web.illinois.edu/get_product_details.php";
-        val url2 = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=4&cuid=1"
+        val url2 = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=4&cuid=" + utilities.cuid
 
         prid = message.toInt();
 
-        val url3 = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=8&cuid=2&prid=" + prid
+        val url3 = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=8&cuid=" + utilities.cuid + "&prid=" + prid
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url+"?prid="+message, null,
@@ -154,7 +154,7 @@ class DisplayItemInfo : AppCompatActivity() {
         add_cart.setOnClickListener{
             //utilities.save("test", "abc")
             val t = Transaction()
-            t.cuId = 1
+            t.cuId = utilities.cuid
             t.prId = prid
             t.quantity = parseInt(quantity.text.toString());
             t.txId = txid

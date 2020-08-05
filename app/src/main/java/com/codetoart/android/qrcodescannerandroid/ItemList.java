@@ -111,7 +111,7 @@ public class ItemList extends AppCompatActivity {
                 public void onClick(View v) {
                     RequestQueue queue = Volley.newRequestQueue(MangoDB.getAppContext());
 
-                    String url ="https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=6&cuid=1&txid=" + t.txId + "&prid=" + t.prId;
+                    String url ="https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=6&cuid=" + utilities.cuid  + "&txid=" + t.txId + "&prid=" + t.prId;
 
 
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
