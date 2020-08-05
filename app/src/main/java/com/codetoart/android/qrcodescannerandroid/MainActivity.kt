@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         recommended.setOnClickListener {
             // Instantiate the RequestQueue.
-            val url = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=7&cuid=2"
+            val url = "https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=7&cuid=1"
             val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                             t.quantity = 1;
                             t.txId = txid;
                             t.addedFrom = "qr"
-                            t.desc = cur.getString("prDesc");
+                            t.desc = "";
                             t.name = cur.getString("prName");
                             t.imgURL = cur.getString("prImage");
 
