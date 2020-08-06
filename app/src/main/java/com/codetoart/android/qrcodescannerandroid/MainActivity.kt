@@ -32,6 +32,13 @@ class MainActivity : AppCompatActivity() {
         //Picasso.get().load("https://i.imgur.com/DvpvklR.png").into(imageView);
         //imageView.setImageResource(R.drawable.tom);
 
+        /** Called when the user taps the Send button */
+        butHistory.setOnClickListener({
+            val myIntent2 = Intent(this@MainActivity,pastList::class.java)
+            this@MainActivity.startActivity(myIntent2)
+
+        })
+
         changecuid.setOnClickListener {
             utilities.cuid = cuidbar.text.toString().toInt()
             Toast.makeText(this@MainActivity, "Changed cuID to " + utilities.cuid, Toast.LENGTH_LONG).show()
