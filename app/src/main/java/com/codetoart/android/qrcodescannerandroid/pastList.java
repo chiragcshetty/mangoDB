@@ -30,6 +30,7 @@ import com.codetoart.android.qrcodescannerandroid.Transaction;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class pastList extends AppCompatActivity {
@@ -42,26 +43,61 @@ public class pastList extends AppCompatActivity {
     List<String> titles = new ArrayList<String>();
     List<String> desc = new ArrayList<String>();
 
+    List<String> imgURL = new ArrayList<String>();
+    List<String> dates = new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_list);
         listView = findViewById(R.id.listViewPast);
 
+        final pastList cur = this;
 
-        for (Transaction t: Transaction.getTransactions()){
-            titles.add(t.name);
-            desc.add("Quantity:" + t.quantity);
-        }
+        RequestQueue queue = Volley.newRequestQueue(MangoDB.getAppContext());
 
-        int img[] = new int[Transaction.getTransactions().size()];
+        String url ="https://chiragshetty.web.illinois.edu/app_access/list.php?actionId=9&cuid=" + utilities.cuid;
 
-        for(int i = 0; i < img.length; i++) {
-            img[i] = R.drawable.groc;
-        }
 
-        MyAdapter adapter = new MyAdapter(this, titles.toArray(new String[0]), desc.toArray(new String[0]), img);
-        listView.setAdapter(adapter);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getInt("success") != 1) {
+                                return;
+                            }
+                            JSONArray history = response.getJSONArray("history");
+                            for (int i = 0; i < history.length(); i++) {
+                                JSONObject h = history.getJSONObject(i);
+                                titles.add(h.getString("prName"));
+                                desc.add("Quantity:" + h.getString("quantity"));
+                                imgURL.add(h.getString("prImage"));
+                                dates.add(h.getString("dateAdded"));
+                            }
+
+                            int img[] = new int[history.length()];
+
+                            for (int i = 0; i < img.length; i++) {
+                                img[i] = R.drawable.groc;
+                            }
+
+                            MyAdapter adapter = new MyAdapter(cur, titles.toArray(new String[0]), desc.toArray(new String[0]), img);
+                            listView.setAdapter(adapter);
+                        } catch (Exception e) {
+                            return;
+                        }
+                    }
+    }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest);
 
     }
 
@@ -93,12 +129,10 @@ public class pastList extends AppCompatActivity {
             images.setImageResource(rImgs[position]);
             myTitle.setText(rTitle[position]);
             myDescription.setText(rDescription[position]);
-            dateB.setText("Hello");
+            dateB.setText(dates.get(position));
 
-            final int i = position;
-            final Transaction t = Transaction.getTransactions().get(i);
             Picasso.get()
-                    .load(t.imgURL)
+                    .load(imgURL.get(position))
                     .into(images);
 
             return row;
