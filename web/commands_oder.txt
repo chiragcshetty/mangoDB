@@ -214,3 +214,22 @@ DELIMITER ;
 
 CALL prSimilarity2(2,12)
 
+%%%%%%%%%
+
+DELIMITER //
+CREATE PROCEDURE getHistory(IN cust INT)
+    BEGIN
+        CREATE TEMPORARY TABLE cuTxList
+            SELECT t.prID, t.quantity, t.dateAdded
+            FROM transactionList t 
+            WHERE t.cuID = cust AND t.dateAdded >= (SELECT DATE_ADD(NOW(), INTERVAL -200 DAY)) AND t.listType='history';
+            
+        SELECT pr.prID, pr.prName,pr.prImage,tl.quantity, tl.dateAdded 
+        FROM cuTxList tl NATURAL JOIN products pr
+        ORDER BY tl.dateAdded DESC;
+        
+END //
+DELIMITER ;
+
+CALL getHistory(1)
+
